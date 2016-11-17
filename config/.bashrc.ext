@@ -1,0 +1,12 @@
+alias watch='watch -d -t --color -b -e'
+alias make='make -j4'
+alias h=history
+alias gs='git status -sb'
+alias gk='gitk --all &'
+alias gd='git diff'
+alias gdc='git diff --cached'
+alias gg='gitg > /dev/null &'
+alias gw='watch -d -t --color -b -e "hostname && echo && git -c color.status=always status -sb"'
+
+export VISUAL=vim
+export EDITOR=vim
