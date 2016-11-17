@@ -1,0 +1,8 @@
+[user]
+        name = Krzysztof Madejski
+        email = krzysztof@madejscy.pl
+[core]
+        autocrlf = true
+        editor = vim
+[push]
+        default = simple
