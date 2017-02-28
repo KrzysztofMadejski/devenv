@@ -1,2 +1,9 @@
-mkdir -p ~/.config/git
-cat config/.git.userignore >> ~/.config/git/ignore
+#!/bin/bash
+
+repo="$(cd -P "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+
+# TODO ln
+cp -i $repo/config/.* ~/ 
+echo ". ~/.bashrc.ext" >> ~/.bashrc
+
+
