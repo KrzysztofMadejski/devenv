@@ -1,7 +1,8 @@
 #!/bin/bash
-: ${2?"Usage: $0 wpdir level[secure] sudo?"}
 
-# TODO wpdir exists and contains wp-admin
+#########  ARGUMENTS
+
+: ${2?"Usage: $0 wpdir level[secure|install-plugin] sudo?"}
 
 wpdir=$1
 level=$2
@@ -21,13 +22,53 @@ if [ ! -d "$wpdir/wp-admin" ]; then
     exit 1
 fi
 
-if [ "$level" == "secure" ] 
-then
-    $sudo chmod -R a=rX,u+w $wpdir
+#########  FUNCTIONS
+
+function apache_writable { # dir
+    echo "Making www-data writable: $1" 
+
+    $sudo chmod -R g+w $1
+    $sudo chgrp -R www-data $1
+}
+
+
+#########  MAIN
+
+if [ "$level" == "secure" ]; then
+    echo "Making wordpress install [$level]: $wpdir"
+
+    # default 755, 644
+    $sudo chmod -R a=rX,u+w $wpdir 
+
+    # allow media uploads, etc.
+    apache_writable "$wpdir/wp-content/uploads"
 
     # All-in-One Migration
-    $sudo chmod g+w "$wpdir/wp-content/plugins/all-in-one-wp-migration/storage"
-    $sudo chgrp www-data "$wpdir/wp-content/plugins/all-in-one-wp-migration/storage"
+    apache_writable "$wpdir/wp-content/plugins/all-in-one-wp-migration/storage"
+
+    # Wordfence data
+    apache_writable "$wpdir/wp-content/wflogs"
+
+    # TODO backups shouldn't be accessible
+    # apache_writable "$wpdir/wp-content/ai1wm-backups/"
+
+elif [ "$level" == "install-plugin" ]; then
+    echo "Making wordpress install [$level]: $wpdir"
+
+    apache_writable "$wpdir/wp-content/upgrade"
+    apache_writable "$wpdir/wp-content/languages"
+    apache_writable "$wpdir/wp-content/plugins"
+
+elif [ "$level" == "core-upgrade" ]; then
+    echo "Making wordpress install [$level]: $wpdir"
+
+    apache_writable "$wpdir/wp-content/upgrade"
+    apache_writable "$wpdir/wp-content/languages"
+    apache_writable "$wpdir/wp-admin"
+    apache_writable "$wpdir/wp-includes"
+    apache_writable "$wpdir/readme.html"
+    apache_writable "$wpdir/license.txt"
+
 else
     echo "Unknown level: $level"
     exit 1

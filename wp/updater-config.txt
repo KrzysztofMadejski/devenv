@@ -1,0 +1,12 @@
+define('FS_METHOD', 'direct');
+define('FTP_BASE', '/var/www/html/');
+
+# or
+
+define('FS_METHOD', 'ssh2');
+define('FTP_BASE', '/var/www/html/');
+define('FTP_PUBKEY', '/home/updater/.ssh/id_rsa.pub');
+define('FTP_PRIKEY', '/home/updater/.ssh/id_rsa');
+define('FTP_USER', 'updater');
+define('FTP_HOST', 'localhost');
+
