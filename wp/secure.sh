@@ -25,10 +25,12 @@ fi
 #########  FUNCTIONS
 
 function apache_writable { # dir
-    echo "Making www-data writable: $1" 
+    if [ -d "$DIRECTORY" ]; then
+    	echo "Making www-data writable: $1" 
 
-    $sudo chmod -R g+w $1
-    $sudo chgrp -R www-data $1
+    	$sudo chmod -R g+w $1
+    	$sudo chgrp -R www-data $1
+    fi
 }
 
 
@@ -48,6 +50,9 @@ if [ "$level" == "secure" ]; then
 
     # Wordfence data
     apache_writable "$wpdir/wp-content/wflogs"
+
+    # Themes
+    apache_writable "$wpdir/wp-content/themes/ventcamp/cache"
 
     # TODO backups shouldn't be accessible
     # apache_writable "$wpdir/wp-content/ai1wm-backups/"
