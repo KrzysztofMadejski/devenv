@@ -2,7 +2,7 @@
 
 #########  ARGUMENTS
 
-: ${2?"Usage: $0 wpdir level[secure|install-plugin] sudo?"}
+: ${2?"Usage: $0 wpdir level[secure|install-plugin|core-upgrade] sudo?"}
 
 wpdir=$1
 level=$2
@@ -68,6 +68,9 @@ elif [ "$level" == "core-upgrade" ]; then
     apache_writable "$wpdir/wp-includes"
     apache_writable "$wpdir/readme.html"
     apache_writable "$wpdir/license.txt"
+
+    $sudo cp --backup=numbered $wpdir/wp-settings.php $wpdir/wp-settings.php.old
+    apache_writable "$wpdir/wp-settings.php"
 
 else
     echo "Unknown level: $level"
