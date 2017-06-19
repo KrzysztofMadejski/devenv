@@ -11,5 +11,5 @@ PATH="$HOME/.rbenv/bin:$PATH"
 echo 'eval "$(rbenv init -)"' >> ~/.bashrc
 eval "$(rbenv init -)"
 
-# Run: rbenv install -l
-# Check https://github.com/rbenv/rbenv for docs
+echo 'To install run: rbenv install -l'
+echo 'Check https://github.com/rbenv/rbenv for docs'
