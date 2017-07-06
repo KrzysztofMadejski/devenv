@@ -25,11 +25,14 @@ fi
 #########  FUNCTIONS
 
 function apache_writable { # dir
-    if [ -d "$DIRECTORY" ]; then
+    if [ -d "$1" ]; then
     	echo "Making www-data writable: $1" 
 
     	$sudo chmod -R g+w $1
     	$sudo chgrp -R www-data $1
+    else
+        : 
+	# echo "Warning: Directory doesnt' exist: $1"
     fi
 }
 
