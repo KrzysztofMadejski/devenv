@@ -24,12 +24,15 @@ fi
 
 #########  FUNCTIONS
 
-function apache_writable { # dir
-    if [ -d "$DIRECTORY" ]; then
+function apache_writable {
+    if [ -e "$1" ]; then
     	echo "Making www-data writable: $1" 
 
     	$sudo chmod -R g+w $1
     	$sudo chgrp -R www-data $1
+    else
+        : 
+	# echo "Warning: Directory doesnt' exist: $1"
     fi
 }
 
@@ -40,6 +43,7 @@ if [ "$level" == "secure" ]; then
     echo "Making wordpress install [$level]: $wpdir"
 
     # default 755, 644
+    echo "Setting recursively file permissions a=rX,u+w"
     $sudo chmod -R a=rX,u+w $wpdir 
 
     # allow media uploads, etc.
@@ -65,6 +69,10 @@ elif [ "$level" == "install-plugin" ]; then
     apache_writable "$wpdir/wp-content/plugins"
 
 elif [ "$level" == "core-upgrade" ]; then
+    echo "Securing first.."
+    ${0} $wpdir secure $sudo
+    echo ""
+
     echo "Making wordpress install [$level]: $wpdir"
 
     apache_writable "$wpdir/wp-content/upgrade"
@@ -73,6 +81,8 @@ elif [ "$level" == "core-upgrade" ]; then
     apache_writable "$wpdir/wp-includes"
     apache_writable "$wpdir/readme.html"
     apache_writable "$wpdir/license.txt"
+    apache_writable "$wpdir/wp-signup.php"
+    apache_writable "$wpdir/wp-login.php"
 
     $sudo cp --backup=numbered $wpdir/wp-settings.php $wpdir/wp-settings.php.old
     apache_writable "$wpdir/wp-settings.php"
