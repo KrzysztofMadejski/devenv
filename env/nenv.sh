@@ -12,7 +12,8 @@ while getopts "gh" opt; do
 done
 
 if [ $local ]; then
-	local install curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.2/install.sh | bash
+	# local install 
+    curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.2/install.sh | bash
 	export NVM_DIR="$HOME/.nvm"
 else
 	curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.33.2/install.sh | sudo NVM_DIR=/usr/local/nvm bash
