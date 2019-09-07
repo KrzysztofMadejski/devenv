@@ -1,0 +1,36 @@
+#!/bin/bash
+
+if [[ $# -eq 0 ]] || [[ $# -gt 2 ]]; then
+    echo "Usage: docker-tags repo [tag-filter]"
+fi
+
+# List all tags
+if [[ $# -eq 1 ]]; then
+    res=`curl -s -S "https://registry.hub.docker.com/v2/repositories/library/$@/tags/?page=83"`
+    count=`echo ${res} | jq '.count'`
+    echo "Found $count tags."
+
+    next=`echo ${res} | jq '.next'`
+    echo ${next}
+
+    # echo ${res} | jq '."results"[]["name"]'
+    readarray -t tags <<< "$(echo ${res} | jq '."results"[]["name"]')"
+    # echo ${tags}
+    tags=()
+    for tag in "$(echo ${res} | jq '."results"[]["name"]')" ; do
+        tags+=(${tag})
+    done
+
+    tags=tags | sort
+    echo ${tags[@]}
+
+#    while [[ res | jq '.next'  ]] ; do
+
+#        echo "Getting next page: $next"
+#        res = `curl -s -S "$next"`
+#        tags+= res | jq '."results"[]["name"]'
+#        echo $tags
+#    done
+#
+
+fi
