@@ -1,12 +1,12 @@
 #!/bin/bash
-local=0
+local=1
 while getopts "gh" opt; do
   case "$opt" in
   h|\?)
       show_help
       exit 0
       ;;
-  l)  local=1
+  g)  local=0 #TODO handle it, as pip installs now by default into local
       ;;
   esac
 done
@@ -22,7 +22,6 @@ pip_user_flag=
 if [ $local ]; then
     pip_user_flag=--user
     on_startup 'export PATH="$PATH:$HOME/.local/bin"'
-else
 fi
 
 if ! [ -x "$(command -v pip)" ]; then
@@ -41,4 +40,9 @@ if [ $local ]; then
 else
     on_startup 'source /usr/local/bin/virtualenvwrapper.sh'
 fi
+
+# wrappers for different pythons
+on_startup "alias mkvirtualenv3='mkvirtualenv --python=`which python3`'"
+on_startup "alias mkvirtualenv2='mkvirtualenv --python=`which python2`'"
+
 

@@ -2,7 +2,7 @@
         name = Krzysztof Madejski
         email = krzysztof@madejscy.pl
 [core]
-        autocrlf = true
+        autocrlf = input
         editor = vim
         excludesFile = ~/.gitignore
 [push]
