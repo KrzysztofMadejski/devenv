@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+# Usage . goactivate ~/.go/yourenv
+
+[ ! -d $1 ] && echo "Directory $1 does not exist." && exit 1
+
+export PATH=$PATH:$1/bin
+export GOPATH=$1
+
