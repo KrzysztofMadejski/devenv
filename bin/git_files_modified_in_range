@@ -1,0 +1,9 @@
+  from=$1
+  to=$2
+
+  commits_created_asc=`git rev-list --ancestry-path  --reverse --oneline $1~1..$2`
+
+  while IFS= read -r commit ; do
+     commit_hash=`echo $commit | cut -d' ' -f 1`
+     git diff-tree --no-commit-id --name-only $commit_hash -r | awk -v commit="$commit" '{print commit " " $1}'
+  done <<< "$commits_created_asc"
